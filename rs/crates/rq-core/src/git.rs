@@ -99,11 +99,11 @@ impl GitRepo {
     Ok(())
   }
 
-  pub fn has_upstream(&self) -> Result<bool> {
+  pub fn upstream(&self) -> Result<Option<&'static str>> {
     let status = command(&format!("git remote get-url {UPSTREAM}"), &self.path)
       .status()
       .context("`git remote` failed")?;
-    Ok(status.success())
+    Ok(status.success().then_some(UPSTREAM))
   }
 
   fn apply(&self, patch: &str) -> Result<()> {
@@ -189,10 +189,12 @@ impl GitRepo {
     Ok((head, merge_type))
   }
 
-  pub fn checkout_main_and_pull(&self) -> Result<()> {
-    git!(self, "checkout main")?;
-    git!(self, "pull")?;
-    Ok(())
+  pub fn pull(&self) -> Result<()> {
+    git!(self, "pull")
+  }
+
+  pub fn checkout_main(&self) -> Result<()> {
+    git!(self, "checkout main")
   }
 
   pub fn head_commit(&self) -> Result<String> {
