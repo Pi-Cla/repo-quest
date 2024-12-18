@@ -12,13 +12,14 @@ fn get_user_env() -> HashMap<String, String> {
     .output()
     .expect("Failed to get shell env");
   let stdout = String::from_utf8(output.stdout).expect("Env vars not utf8");
-  stdout
-    .lines()
-    .map(|line| {
-      let (key, value) = line.split_once("=").expect("Failed to parse env k/v");
-      (key.to_string(), value.to_string())
-    })
-    .collect()
+  let mut key_vals: HashMap <String,String> = HashMap::new();
+  for line in stdout.lines() {
+    // If a key-value pair can be parsed we insert it, else we move on
+    if let Some((key, value)) = line.split_once("=") {
+      key_vals.insert(key.to_string(), value.to_string());
+    }
+  }
+  key_vals
 }
 
 static ENV: LazyLock<HashMap<String, String>> = LazyLock::new(|| {
