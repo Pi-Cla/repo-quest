@@ -95,3 +95,10 @@ Run `repo-quest` from the command line.
 #### Windows
 
 Search for "RepoQuest" in your applications list and run it.
+
+
+**FAQ**
+
+- **Q:** On Mac, when I open RepoQuest, I get the error "“RepoQuest” is damaged and can’t be opened. You should move it to the Trash."
+
+  **A:** Make sure you run the `xattr` command [described above](#macos).
